@@ -27,13 +27,15 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
         private readonly IAppLogger<CheckoutModel> _logger;
         private readonly IOrderItemsReserverService _orderItemsReserverService;
         private readonly IDeliveryOrderProcessorService _deliveryOrderProcessorService;
+        private readonly IOrderReserverService _orderReserverService;
 
         public CheckoutModel(IBasketService basketService,
             IBasketViewModelService basketViewModelService,
             SignInManager<ApplicationUser> signInManager,
             IOrderService orderService,
-            IOrderItemsReserverService orderItemsReserverService,
+            //IOrderItemsReserverService orderItemsReserverService,
             IDeliveryOrderProcessorService deliveryOrderProcessorService,
+            IOrderReserverService orderReserverService,
             IAppLogger<CheckoutModel> logger)
         {
             _basketService = basketService;
@@ -41,8 +43,9 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
             _orderService = orderService;
             _basketViewModelService = basketViewModelService;
             _logger = logger;
-            _orderItemsReserverService = orderItemsReserverService;
+            //_orderItemsReserverService = orderItemsReserverService;
             _deliveryOrderProcessorService = deliveryOrderProcessorService;
+            _orderReserverService = orderReserverService;
     }
 
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -67,7 +70,8 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
                 await _basketService.SetQuantities(BasketModel.Id, updateModel);
                 var order = await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
                 await _deliveryOrderProcessorService.PlaceOrderAsync(order);
-                await _orderItemsReserverService.PlaceOrderAsync(updateModel);
+                //await _orderItemsReserverService.PlaceOrderAsync(updateModel);
+                await _orderReserverService.PlaceOrderAsync(updateModel);
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
             }
             catch (EmptyBasketOnCheckoutException emptyBasketOnCheckoutException)

@@ -17,6 +17,8 @@ using Microsoft.eShopWeb.ApplicationCore.Services;
 using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Web.Configuration;
+using Microsoft.eShopWeb.Web.Interfaces;
+using Microsoft.eShopWeb.Web.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -164,6 +166,8 @@ namespace Microsoft.eShopWeb.Web
             {
                 client.BaseAddress = new Uri(Configuration["DeliveryOrderProcessorUrl"]);
             });
+
+            services.AddScoped<IOrderReserverService, OrderReserverService>();
 
             // add blazor services
             services.AddBlazoredLocalStorage();
